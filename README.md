@@ -33,7 +33,7 @@ Position/rotation:
 
 I own the Oculus Quest 2, but it should work with all the VR headsets.
 
-I didn't tried on Linux but it should work there as well, the websocket client is based on `System.Net.WebSockets.ClientWebSocket`.
+I haven't tried on Linux yet, but it should work there as well. The websocket client is based on `System.Net.WebSockets.ClientWebSocket`.
 
 ## Streaming
 

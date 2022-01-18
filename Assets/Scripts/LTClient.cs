@@ -9,14 +9,14 @@ public class LTClient : MonoBehaviour {
     ClientWebSocket ws;
 
     public string serverUrl;
-    public Transform headset;
-    public Transform rightHand;
-    public Transform leftHand;
+
+    public LTDeviceSimulator simulator;
 
     VRTransform lastTransform;
 
+
     async void Start() {
-        await Task.Delay(3000);
+        await Task.Delay(2000);
         _ = Task.Run(() => RunWsClient());
         Camera.main.stereoTargetEye = StereoTargetEyeMask.Both;
     }
@@ -28,9 +28,7 @@ public class LTClient : MonoBehaviour {
     }
 
     private void UpdateWithVrTransform(VRTransform t) {
-        UpdateVrTransformItem(headset, t.headset);
-        UpdateVrTransformItem(rightHand, t.rightHand);
-        UpdateVrTransformItem(leftHand, t.leftHand);
+        simulator.UpdateWithStream(t);
     }
 
     private void UpdateVrTransformItem(Transform t, VRItemTransform vrt) {
