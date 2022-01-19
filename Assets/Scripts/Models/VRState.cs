@@ -12,7 +12,7 @@ public class VRInputState {
     [Serializable]
     public class Trigger {
         public float index = default;
-        public float hand = default;
+        public float grip = default;
     }
 
     public ushort buttons;

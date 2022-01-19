@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-
-public enum LTControllerButton {
+﻿public enum LTControllerButton {
     PrimaryButton,
     PrimaryTouch,
     SecondaryButton,

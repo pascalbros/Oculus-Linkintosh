@@ -40,7 +40,7 @@ public class LTDeviceSimulator : MonoBehaviour {
     private void UpdateInputController(LTSimulatedController c, LTSimulatedControllerState ss, VRInputState s) {
         ushort buttons = s.buttons;
         ss.buttons = buttons;
-        ss.grip = s.trigger.hand;
+        ss.grip = s.trigger.grip;
         ss.trigger = s.trigger.index;
         ss.primary2DAxis = s.axis2D.primary;
         InputState.Change(c, ss, InputUpdateType.Default);

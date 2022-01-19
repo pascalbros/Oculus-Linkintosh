@@ -15,9 +15,8 @@ public class LTClient : MonoBehaviour {
     VRState lastState;
 
     async void Start() {
-        await Task.Delay(2000);
+        await Task.Delay(500);
         _ = Task.Run(() => RunWsClient());
-        Camera.main.stereoTargetEye = StereoTargetEyeMask.Both;
     }
 
     void Update() {
@@ -34,7 +33,7 @@ public class LTClient : MonoBehaviour {
         ws = new();
         Uri serverUri = new(serverUrl);
         var source = new CancellationTokenSource();
-        source.CancelAfter(Int32.MaxValue);
+        source.CancelAfter(int.MaxValue);
 
         await ws.ConnectAsync(serverUri, source.Token);
         while (ws.State == WebSocketState.Open) {

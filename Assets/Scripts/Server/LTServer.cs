@@ -9,7 +9,7 @@ class LTServer : MonoBehaviour {
     public Transform rightHand;
 
     public VRState vr = new();
-    public XRInputListener inputListener;
+    public LTInputListener inputListener;
 
     WebSocketServer server;
     readonly List<IWebSocketConnection> allSockets = new();
