@@ -9,35 +9,25 @@ public class LTClient : MonoBehaviour {
     ClientWebSocket ws;
 
     public string serverUrl;
-    public Transform headset;
-    public Transform rightHand;
-    public Transform leftHand;
 
-    VRTransform lastTransform;
+    public LTDeviceSimulator simulator;
+
+    VRState lastState;
 
     async void Start() {
-        await Task.Delay(3000);
+        await Task.Delay(2000);
         _ = Task.Run(() => RunWsClient());
         Camera.main.stereoTargetEye = StereoTargetEyeMask.Both;
     }
 
     void Update() {
-        if (lastTransform != null) {
-            UpdateWithVrTransform(lastTransform);
+        if (lastState != null) {
+            UpdateWithVrState(lastState);
         }
     }
 
-    private void UpdateWithVrTransform(VRTransform t) {
-        UpdateVrTransformItem(headset, t.headset);
-        UpdateVrTransformItem(rightHand, t.rightHand);
-        UpdateVrTransformItem(leftHand, t.leftHand);
-    }
-
-    private void UpdateVrTransformItem(Transform t, VRItemTransform vrt) {
-        if (t != null) {
-            t.localPosition = vrt.position;
-            t.localEulerAngles = vrt.eulerAngles;
-        }
+    private void UpdateWithVrState(VRState state) {
+        simulator.UpdateWithStream(state);
     }
 
     private async Task RunWsClient() {
@@ -50,7 +40,7 @@ public class LTClient : MonoBehaviour {
         while (ws.State == WebSocketState.Open) {
             var receiveBuffer = new byte[32 * 1024];
             var offset = 0;
-            var dataPerPacket = 1024; //Just for example
+            var dataPerPacket = 1024;
             while (true) {
                 ArraySegment<byte> bytesReceived =
                           new(receiveBuffer, offset, dataPerPacket);
@@ -61,9 +51,9 @@ public class LTClient : MonoBehaviour {
                     break;
             }
             var stringResult = Encoding.UTF8.GetString(receiveBuffer, 0, offset);
-            var vrTransform = JsonUtility.FromJson<VRTransform>(stringResult);
-            if (vrTransform != null) {
-                lastTransform = vrTransform;
+            var vrState = JsonUtility.FromJson<VRState>(stringResult);
+            if (vrState != null) {
+                lastState = vrState;
             }
         }
     }

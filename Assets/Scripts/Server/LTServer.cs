@@ -4,19 +4,21 @@ using Fleck;
 
 class LTServer : MonoBehaviour {
 
-    public Transform[] headsetTransform;
-    readonly VRTransform vr = new();
+    public Transform headset;
+    public Transform leftHand;
+    public Transform rightHand;
+
+    public VRState vr = new();
+    public XRInputListener inputListener;
+
     WebSocketServer server;
     readonly List<IWebSocketConnection> allSockets = new();
 
     void Start() {
-        vr.Setup();
-        FleckLog.Level = LogLevel.Debug;
+        FleckLog.Level = LogLevel.Error;
         server = new WebSocketServer("ws://0.0.0.0:8080");
         server.Start(socket => {
-            Debug.Log("Setup!");
             socket.OnOpen = () => {
-                Debug.Log("Open!");
                 allSockets.Add(socket);
             };
             socket.OnClose = () => {
@@ -34,8 +36,13 @@ class LTServer : MonoBehaviour {
     }
 
     async void SendUpdate() {
+        vr.headset.UpdateTransform(headset);
+        vr.leftHand.UpdateTransform(leftHand);
+        vr.rightHand.UpdateTransform(rightHand);
+        vr.leftInput = inputListener.leftState;
+        vr.rightInput = inputListener.rightState;
+
         foreach (var socket in allSockets) {
-            vr.Update(headsetTransform);
             var value = JsonUtility.ToJson(vr);
             await socket.Send(value);
         }
