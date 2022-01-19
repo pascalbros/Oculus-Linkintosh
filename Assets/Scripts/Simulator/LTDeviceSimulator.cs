@@ -5,13 +5,17 @@ using UnityEngine.XR;
 
 public class LTDeviceSimulator : MonoBehaviour {
 
-    LTSimulatedHMDState hmdDeviceState = new();
-    LTSimulatedControllerState leftControllerState = new();
-    LTSimulatedControllerState rightControllerState = new();
+    public LTSimulatedHMDState hmdDeviceState = new();
+    public LTSimulatedControllerState leftControllerState = new();
+    public LTSimulatedControllerState rightControllerState = new();
 
     LTSimulatedHMD hmdDevice = new();
     LTSimulatedController leftController = new();
     LTSimulatedController rightController = new();
+
+    public VRInputState leftInputState = new();
+    public VRInputState rightInputState = new();
+
     void Start() {
         hmdDeviceState.Reset();
         leftControllerState.Reset();
@@ -19,23 +23,30 @@ public class LTDeviceSimulator : MonoBehaviour {
         AddDevices();
     }
 
-    // Update is called once per frame
     void Update() {
         leftControllerState.isTracked = true;
         rightControllerState.isTracked = true;
         leftControllerState.trackingState = (int)(InputTrackingState.Position | InputTrackingState.Rotation);
         rightControllerState.trackingState = (int)(InputTrackingState.Position | InputTrackingState.Rotation);
-
-        InputState.Change(hmdDevice.centerEyePosition, hmdDeviceState.centerEyePosition);
-        InputState.Change(hmdDevice.centerEyeRotation, hmdDeviceState.centerEyeRotation);
-        InputState.Change(hmdDevice.devicePosition, hmdDeviceState.devicePosition);
-        InputState.Change(hmdDevice.deviceRotation, hmdDeviceState.deviceRotation);
-        //InputState.Change(hmdDevice, hmdDeviceState);
-        InputState.Change(leftController, leftControllerState);
-        InputState.Change(rightController, rightControllerState);
+        UpdateInput();
     }
 
-    protected void AddDevices() {
+    private void UpdateInput() {
+        InputState.Change(hmdDevice, hmdDeviceState);
+        UpdateInputController(leftController, leftControllerState, leftInputState);
+        UpdateInputController(rightController, rightControllerState, rightInputState);
+    }
+
+    private void UpdateInputController(LTSimulatedController c, LTSimulatedControllerState ss, VRInputState s) {
+        ushort buttons = s.buttons;
+        ss.buttons = buttons;
+        ss.grip = s.trigger.hand;
+        ss.trigger = s.trigger.index;
+        ss.primary2DAxis = s.axis2D.primary;
+        InputState.Change(c, ss, InputUpdateType.Default);
+    }
+
+    private void AddDevices() {
         hmdDevice = InputSystem.AddDevice<LTSimulatedHMD>();
         leftController = InputSystem.AddDevice<LTSimulatedController>($"{nameof(LTSimulatedController)} - {UnityEngine.InputSystem.CommonUsages.LeftHand}");
         rightController = InputSystem.AddDevice<LTSimulatedController>($"{nameof(LTSimulatedController)} - {UnityEngine.InputSystem.CommonUsages.RightHand}");
@@ -43,14 +54,16 @@ public class LTDeviceSimulator : MonoBehaviour {
         InputSystem.SetDeviceUsage(rightController, UnityEngine.InputSystem.CommonUsages.RightHand);
     }
 
-    public void UpdateWithStream(VRTransform t) {
-        hmdDeviceState.centerEyePosition = t.headset.position;
-        hmdDeviceState.centerEyeRotation = Quaternion.Euler(t.headset.eulerAngles);
+    public void UpdateWithStream(VRState s) {
+        hmdDeviceState.centerEyePosition = s.headset.position;
+        hmdDeviceState.centerEyeRotation = s.headset.rotation;
         hmdDeviceState.devicePosition = hmdDeviceState.centerEyePosition;
         hmdDeviceState.deviceRotation = hmdDeviceState.centerEyeRotation;
-        leftControllerState.devicePosition = t.leftHand.position;
-        leftControllerState.deviceRotation = Quaternion.Euler(t.leftHand.eulerAngles);
-        rightControllerState.devicePosition = t.rightHand.position;
-        rightControllerState.deviceRotation = Quaternion.Euler(t.rightHand.eulerAngles);
+        leftControllerState.devicePosition = s.leftHand.position;
+        leftControllerState.deviceRotation = s.leftHand.rotation;
+        rightControllerState.devicePosition = s.rightHand.position;
+        rightControllerState.deviceRotation = s.rightHand.rotation;
+        leftInputState = s.leftInput;
+        rightInputState = s.rightInput;
     }
 }

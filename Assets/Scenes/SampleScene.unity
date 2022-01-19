@@ -893,10 +893,10 @@ MonoBehaviour:
   m_UpdateTrackingType: 0
   m_EnableInputTracking: 1
   m_EnableInputActions: 1
-  m_ModelPrefab: {fileID: 400018, guid: 25b5eb0761edb6346b0b3444af76b55e, type: 3}
+  m_ModelPrefab: {fileID: 6528518635517122269, guid: 272bf317374364412a9115a26c92e073, type: 3}
   m_ModelParent: {fileID: 0}
   m_Model: {fileID: 0}
-  m_AnimateModel: 1
+  m_AnimateModel: 0
   m_ModelSelectTransition: 
   m_ModelDeSelectTransition: 
   m_PositionAction:
@@ -1403,10 +1403,10 @@ MonoBehaviour:
   m_UpdateTrackingType: 0
   m_EnableInputTracking: 1
   m_EnableInputActions: 1
-  m_ModelPrefab: {fileID: 400016, guid: 8b83018900d13bb4f8e0ad895cb004e5, type: 3}
+  m_ModelPrefab: {fileID: 2254531065213721487, guid: 314ad80ce4cc641c99b65fb4fdb84d7d, type: 3}
   m_ModelParent: {fileID: 0}
   m_Model: {fileID: 0}
-  m_AnimateModel: 1
+  m_AnimateModel: 0
   m_ModelSelectTransition: 
   m_ModelDeSelectTransition: 
   m_PositionAction:
@@ -1666,7 +1666,6 @@ GameObject:
   - component: {fileID: 1731055661}
   - component: {fileID: 1731055663}
   - component: {fileID: 1731055662}
-  - component: {fileID: 1731055664}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -1793,18 +1792,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1731055660}
   m_CullTransparentMesh: 1
---- !u!114 &1731055664
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1731055660}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e770019c1e8e7418096952ca0fe4c3c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1933942763
 GameObject:
   m_ObjectHideFlags: 0
@@ -1816,6 +1803,7 @@ GameObject:
   - component: {fileID: 1933942765}
   - component: {fileID: 1933942764}
   - component: {fileID: 1933942767}
+  - component: {fileID: 1933942769}
   - component: {fileID: 1933942766}
   - component: {fileID: 1933942768}
   m_Layer: 0
@@ -1865,7 +1853,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1933942763}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 637042b041fec406d901e95390840a4e, type: 3}
   m_Name: 
@@ -1879,16 +1867,66 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1933942763}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eb77a8086bc3d467b90f17fcad20b20a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  headsetTransform:
-  - {fileID: 963194228}
-  - {fileID: 1086834132}
-  - {fileID: 1556962751}
+  headset: {fileID: 963194228}
+  leftHand: {fileID: 1556962751}
+  rightHand: {fileID: 1086834132}
+  vr:
+    headset:
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+    rightHand:
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+    leftHand:
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+    leftInput:
+      buttons: 0
+      axis2D:
+        primary: {x: 0, y: 0}
+      trigger:
+        index: 0
+        hand: 0
+    rightInput:
+      buttons: 0
+      axis2D:
+        primary: {x: 0, y: 0}
+      trigger:
+        index: 0
+        hand: 0
+  inputListener: {fileID: 1933942769}
 --- !u!114 &1933942768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1933942763}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2407ef5e633524fc382da0f50db31f4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftInputState:
+    buttons: 0
+    axis2D:
+      primary: {x: 0, y: 0}
+    trigger:
+      index: 0
+      hand: 0
+  rightInputState:
+    buttons: 0
+    axis2D:
+      primary: {x: 0, y: 0}
+    trigger:
+      index: 0
+      hand: 0
+--- !u!114 &1933942769
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1897,9 +1935,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 1933942763}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2407ef5e633524fc382da0f50db31f4a, type: 3}
+  m_Script: {fileID: 11500000, guid: 08be079c8f2e54fe4975dc774a617fd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  leftState:
+    buttons: 0
+    axis2D:
+      primary: {x: 0, y: 0}
+    trigger:
+      index: 0
+      hand: 0
+  rightState:
+    buttons: 0
+    axis2D:
+      primary: {x: 0, y: 0}
+    trigger:
+      index: 0
+      hand: 0
 --- !u!1 &1968457563
 GameObject:
   m_ObjectHideFlags: 0
